@@ -13,6 +13,7 @@ const (
 )
 
 func main() {
+
 	add := flag.Bool("add", false, "add new item")
 	sell := flag.Int("sell", 0, "mark item sold")
 	delete := flag.Int("del", 0, "unlist and item")
