@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/alexeyco/simpletable"
@@ -37,10 +38,6 @@ func green(s string) string {
 
 func blue(s string) string {
 	return fmt.Sprintf("%s%s%s", ColorBlue, s, ColorDefault)
-}
-
-func gray(s string) string {
-	return fmt.Sprintf("%s%s%s", ColorGray, s, ColorDefault)
 }
 
 type Items []item
@@ -107,6 +104,7 @@ func (i *Items) Write(filename string) error {
 }
 
 func (i *Items) Show() {
+
 	table := simpletable.New()
 	table.Header = &simpletable.Header{
 		Cells: []*simpletable.Cell{
@@ -119,7 +117,7 @@ func (i *Items) Show() {
 	}
 
 	var cells [][]*simpletable.Cell
-
+	transac := 0
 	for index, item := range *i {
 		index++
 		text := ""
@@ -127,6 +125,7 @@ func (i *Items) Show() {
 			text = green("Yes")
 		} else {
 			text = red("Sold out")
+			transac += item.Price
 		}
 		cells = append(cells, []*simpletable.Cell{
 			{Text: fmt.Sprintf("%d", index)},
@@ -139,7 +138,7 @@ func (i *Items) Show() {
 
 	table.Body = &simpletable.Body{Cells: cells}
 	table.Footer = &simpletable.Footer{Cells: []*simpletable.Cell{
-		{Align: simpletable.AlignCenter, Span: 5, Text: blue("Total transaction : ")},
+		{Align: simpletable.AlignCenter, Span: 5, Text: blue(fmt.Sprintf("Total transaction: $%s", strconv.Itoa(transac)))},
 	}}
 
 	table.SetStyle(simpletable.StyleMarkdown)
