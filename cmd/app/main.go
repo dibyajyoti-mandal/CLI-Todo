@@ -45,7 +45,7 @@ func main() {
 			fmt.Fprintln(os.Stderr, err.Error())
 			os.Exit(1)
 		}
-		fmt.Printf("item created: %s - price: %d", item, price)
+		fmt.Printf("item created: %s - price: %d\n", item, price)
 		items.Show()
 
 	case *sell > 0:

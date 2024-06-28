@@ -27,6 +27,22 @@ const (
 	ColorGray  = "\x1b[90m"
 )
 
+func red(s string) string {
+	return fmt.Sprintf("%s%s%s", ColorRed, s, ColorDefault)
+}
+
+func green(s string) string {
+	return fmt.Sprintf("%s%s%s", ColorGreen, s, ColorDefault)
+}
+
+func blue(s string) string {
+	return fmt.Sprintf("%s%s%s", ColorBlue, s, ColorDefault)
+}
+
+func gray(s string) string {
+	return fmt.Sprintf("%s%s%s", ColorGray, s, ColorDefault)
+}
+
 type Items []item
 
 func (i *Items) Add(name string, price int) {
@@ -35,7 +51,7 @@ func (i *Items) Add(name string, price int) {
 		Price:     price,
 		Available: true,
 		CreatedAt: time.Now(),
-		UpdatedAt: time.Time{},
+		UpdatedAt: time.Now(),
 	}
 	*i = append(*i, book)
 }
@@ -94,11 +110,11 @@ func (i *Items) Show() {
 	table := simpletable.New()
 	table.Header = &simpletable.Header{
 		Cells: []*simpletable.Cell{
-			{Align: simpletable.AlignCenter, Text: "S/No."},
-			{Align: simpletable.AlignCenter, Text: "Item"},
-			{Align: simpletable.AlignCenter, Text: "Price"},
-			{Align: simpletable.AlignCenter, Text: "Available"},
-			{Align: simpletable.AlignCenter, Text: "Updated At"},
+			{Align: simpletable.AlignCenter, Text: blue("S/No.")},
+			{Align: simpletable.AlignCenter, Text: blue("Item")},
+			{Align: simpletable.AlignCenter, Text: blue("Price")},
+			{Align: simpletable.AlignCenter, Text: blue("Available")},
+			{Align: simpletable.AlignCenter, Text: blue("Updated At")},
 		},
 	}
 
@@ -106,12 +122,26 @@ func (i *Items) Show() {
 
 	for index, item := range *i {
 		index++
-		cells = append(cells, *&[]*simpletable.Cell{
+		text := ""
+		if item.Available {
+			text = green("Yes")
+		} else {
+			text = red("Sold out")
+		}
+		cells = append(cells, []*simpletable.Cell{
 			{Text: fmt.Sprintf("%d", index)},
 			{Text: item.Name},
 			{Text: fmt.Sprintf("%d", item.Price)},
-			{Text: fmt.Sprintf("%t", item.Available)},
+			{Text: text},
 			{Text: item.UpdatedAt.Format(time.RFC822)},
 		})
 	}
+
+	table.Body = &simpletable.Body{Cells: cells}
+	table.Footer = &simpletable.Footer{Cells: []*simpletable.Cell{
+		{Align: simpletable.AlignCenter, Span: 5, Text: blue("Total transaction : ")},
+	}}
+
+	table.SetStyle(simpletable.StyleMarkdown)
+	table.Println()
 }
