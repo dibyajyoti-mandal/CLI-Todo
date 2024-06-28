@@ -1,2 +1,2 @@
-#Store management CLI application
+# Store management CLI application
 ## Written in Go
