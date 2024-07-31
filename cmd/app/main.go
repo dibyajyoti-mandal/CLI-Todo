@@ -9,7 +9,8 @@ import (
 )
 
 const (
-	dataFile = ".data.json"
+	dataFile  = ".data.json"
+	salesFile = ".sales.json"
 )
 
 func main() {
@@ -33,7 +34,6 @@ func main() {
 		items.Show()
 
 	case *add:
-
 		var price int
 		var item string
 		fmt.Println("Enter name of item: ")
